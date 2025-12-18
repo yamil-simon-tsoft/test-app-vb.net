@@ -1,0 +1,25 @@
+{
+    "recommendations": [
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "ms-python.black-formatter",
+        "ms-python.pylint",
+        "ms-vscode.powershell",
+        "njpwerner.autodocstring",
+        "ms-python.autopep8",
+        "visualstudioexptteam.vscodeintellicode",
+        "ms-vscode.vscode-json",
+        "redhat.vscode-yaml",
+        "ms-toolsai.jupyter",
+        "gruntfuggly.todo-tree",
+        "shd101wyy.markdown-preview-enhanced",
+        "yzhang.markdown-all-in-one",
+        "ms-vscode.hexeditor",
+        "ms-vscode-remote.remote-wsl",
+        "ms-vscode.remote-explorer",
+        "eamodio.gitlens",
+        "github.vscode-pull-request-github",
+        "ms-vscode.test-adapter-converter",
+        "hbenl.vscode-test-explorer"
+    ]
+}
