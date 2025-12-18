@@ -1,8 +1,7 @@
 # Dependencias para automatización de Word con WinAppDriver
 
-# Core automation
-appium-python-client>=2.11.1
-selenium>=4.15.0
+# Core automation  
+pywinauto>=0.6.8
 
 # Configuration
 python-dotenv>=1.0.0

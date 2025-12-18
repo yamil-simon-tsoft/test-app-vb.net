@@ -1,37 +1,39 @@
-# Script de activación del entorno virtual
-# Uso: .\activar.ps1
-
-Write-Host "🚀 Configurando entorno de automatización de Word..." -ForegroundColor Cyan
+# Script de activacion del entorno virtual
+Write-Host "Configurando entorno de automatizacion de Word..." -ForegroundColor Cyan
 
 # Verificar Python
 if (-not (Get-Command python -ErrorAction SilentlyContinue)) {
-    Write-Host "❌ Python no instalado" -ForegroundColor Red
-    Write-Host "📥 Descargar desde: https://python.org" -ForegroundColor Yellow
+    Write-Host "Python no instalado" -ForegroundColor Red
+    Write-Host "Descargar desde: https://python.org" -ForegroundColor Yellow
     exit 1
 }
 
 $pythonVersion = python --version
-Write-Host "✅ $pythonVersion detectado" -ForegroundColor Green
+Write-Host "Python detectado: $pythonVersion" -ForegroundColor Green
 
-# Crear/activar entorno virtual
+# Crear entorno virtual si no existe
 if (-not (Test-Path "venv\Scripts\Activate.ps1")) {
-    Write-Host "📦 Creando entorno virtual..." -ForegroundColor Yellow
+    Write-Host "Creando entorno virtual..." -ForegroundColor Yellow
     python -m venv venv
 }
 
-Write-Host "🔄 Activando entorno virtual..." -ForegroundColor Green
+# Activar entorno virtual
+Write-Host "Activando entorno virtual..." -ForegroundColor Green
 & "venv\Scripts\Activate.ps1"
 
-# Actualizar pip e instalar dependencias
-Write-Host "📥 Instalando dependencias..." -ForegroundColor Blue
+# Actualizar pip
+Write-Host "Actualizando pip..." -ForegroundColor Blue
 python -m pip install --upgrade pip --quiet
+
+# Instalar dependencias
+Write-Host "Instalando dependencias..." -ForegroundColor Blue
 pip install -r requirements.txt --quiet
 
 # Configurar .env
 if (-not (Test-Path ".env")) {
     if (Test-Path ".env.example") {
         Copy-Item ".env.example" ".env"
-        Write-Host "📄 Archivo .env creado - EDITAR con rutas correctas" -ForegroundColor Yellow
+        Write-Host "Archivo .env creado - EDITAR con rutas correctas" -ForegroundColor Yellow
     }
 }
 
@@ -45,10 +47,10 @@ foreach ($dir in $directories) {
 
 # Verificar WinAppDriver
 if (Get-Command WinAppDriver -ErrorAction SilentlyContinue) {
-    Write-Host "✅ WinAppDriver encontrado" -ForegroundColor Green
+    Write-Host "WinAppDriver encontrado" -ForegroundColor Green
 } else {
-    Write-Host "⚠️ WinAppDriver no encontrado" -ForegroundColor Yellow
-    Write-Host "📥 Descargar: https://github.com/Microsoft/WinAppDriver/releases" -ForegroundColor Yellow
+    Write-Host "WinAppDriver no encontrado" -ForegroundColor Yellow
+    Write-Host "Descargar: https://github.com/Microsoft/WinAppDriver/releases" -ForegroundColor Yellow
 }
 
 # Verificar Word
@@ -60,22 +62,22 @@ $wordPaths = @(
 $wordFound = $false
 foreach ($path in $wordPaths) {
     if (Test-Path $path) {
-        Write-Host "✅ Word encontrado: $path" -ForegroundColor Green
+        Write-Host "Word encontrado: $path" -ForegroundColor Green
         $wordFound = $true
         break
     }
 }
 
 if (-not $wordFound) {
-    Write-Host "⚠️ Word no encontrado en ubicaciones estándar" -ForegroundColor Yellow
+    Write-Host "Word no encontrado en ubicaciones estandar" -ForegroundColor Yellow
 }
 
 Write-Host ""
 Write-Host "=====================================" -ForegroundColor Cyan
-Write-Host "🎉 ENTORNO CONFIGURADO" -ForegroundColor Green
+Write-Host "ENTORNO CONFIGURADO" -ForegroundColor Green
 Write-Host "=====================================" -ForegroundColor Cyan
 Write-Host ""
-Write-Host "📋 Próximos pasos:" -ForegroundColor White
+Write-Host "Proximos pasos:" -ForegroundColor White
 Write-Host "1. Editar .env con rutas correctas" -ForegroundColor Gray
 Write-Host "2. Iniciar WinAppDriver como Administrador" -ForegroundColor Gray
 Write-Host "3. Ejecutar: python examples\word_examples\01_word_basic_operations.py" -ForegroundColor Gray
