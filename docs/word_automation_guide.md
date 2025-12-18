@@ -1,8 +1,152 @@
-# Guía de Automatización de Microsoft Word
+# Guía de Automatización de Word
 
 ## Introducción
 
-Esta guía proporciona información detallada sobre cómo automatizar Microsoft Word usando WinAppDriver y Python. Se basa en el ejemplo implementado `01_word_basic_operations.py` y explica los patrones, mejores prácticas y técnicas utilizadas.
+Esta guía explica cómo automatizar Microsoft Word usando WinAppDriver y Python.
+
+## Arquitectura
+
+```
+Python Script → WinAppDriver → Windows UI Automation → Word
+```
+
+## Componentes del Driver
+
+### WinAppDriver
+
+```python
+from drivers.winapp_driver import WinAppDriver
+from utils.config import config
+
+# Inicializar
+driver = WinAppDriver(app_path=config.get_word_app_path())
+
+# Iniciar Word
+driver.start_driver()
+```
+
+### Métodos Disponibles
+
+#### Navegación
+
+```python
+# Enviar combinación de teclas
+driver.send_key_combination("alt", "h")  # Tab Inicio
+driver.send_key_combination("alt", "n")  # Tab Insertar
+
+# Obtener título de ventana
+title = driver.get_current_window_title()
+```
+
+#### Capturas
+
+```python
+# Tomar screenshot
+driver.take_screenshot("nombre_archivo")
+```
+
+#### Búsqueda de Elementos
+
+```python
+# Buscar elementos por clase
+elements = driver.find_elements_by_class_name("NetUIRibbonTab")
+```
+
+## Ejemplo Completo
+
+```python
+import time
+from drivers.winapp_driver import WinAppDriver
+from utils.config import config
+
+# Inicializar
+driver = WinAppDriver(app_path=config.get_word_app_path())
+
+try:
+    # Iniciar Word
+    driver.start_driver()
+    time.sleep(3)
+    
+    # Verificar inicio
+    title = driver.get_current_window_title()
+    print(f"Word iniciado: {title}")
+    
+    # Navegar ribbon
+    driver.send_key_combination("alt", "h")  # Inicio
+    time.sleep(1)
+    driver.take_screenshot("ribbon_inicio")
+    
+    # Cerrar Word
+    driver.send_key_combination("alt", "f4")
+    time.sleep(2)
+    
+    # Manejar diálogo
+    try:
+        driver.driver.switch_to.active_element.send_keys("n")
+    except:
+        pass
+        
+finally:
+    driver.stop_driver()
+```
+
+## Teclas de Acceso Rápido de Word
+
+| Combinación | Función |
+|-------------|---------|
+| `Alt + H` | Tab Inicio |
+| `Alt + N` | Tab Insertar |
+| `Alt + G` | Tab Diseño |
+| `Alt + S` | Tab Referencias |
+| `Alt + M` | Tab Correspondencia |
+| `Alt + R` | Tab Revisar |
+| `Alt + W` | Tab Vista |
+| `Alt + F4` | Cerrar Word |
+| `Ctrl + N` | Nuevo documento |
+| `Ctrl + S` | Guardar |
+
+## Solución de Problemas
+
+### Word no inicia
+```python
+# Verificar ruta
+print(config.get_word_app_path())
+
+# Verificar que WinAppDriver esté corriendo
+# Ejecutar: WinAppDriver.exe como Administrador
+```
+
+### Elementos no encontrados
+```python
+# Aumentar tiempo de espera
+time.sleep(5)
+
+# Verificar que Word haya cargado completamente
+title = driver.get_current_window_title()
+print(f"Título actual: {title}")
+```
+
+### Diálogos inesperados
+```python
+# Enviar tecla para cerrar diálogos
+try:
+    driver.driver.switch_to.active_element.send_keys("escape")
+except:
+    pass
+```
+
+## Mejores Prácticas
+
+1. **Esperas**: Usar `time.sleep()` después de acciones importantes
+2. **Capturas**: Tomar screenshots para debugging
+3. **Manejo de errores**: Usar try/except para operaciones críticas
+4. **Limpieza**: Siempre cerrar el driver en el bloque finally
+
+## Recursos
+
+- [Ejemplo práctico](../examples/word_examples/01_word_basic_operations.py)
+- [Configuración](../src/utils/config.py)
+- [Driver](../src/drivers/winapp_driver.py)
 
 ## Conceptos Fundamentales
 
